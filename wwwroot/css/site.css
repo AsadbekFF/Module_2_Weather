@@ -1,0 +1,25 @@
+﻿.search {
+    background-color: black;
+    width: 95%;
+    height: 400px;
+    margin: auto;
+}
+
+form label input:nth-child(1) {
+    /* border: 1px solid red; */
+    margin-left: 10%;
+    border-radius: 1em;
+    height: 50px;
+    width: 400px;
+    /* position: absolute;    
+    top: 10%;
+    left: 10%; */
+}
+
+form label input:nth-child(2) {
+    /* border: 1px solid red; */
+    /* margin: auto !important; */
+    border-radius: 1em;
+    height: 55px;
+    width: 60px;
+    cursor: pointer;
