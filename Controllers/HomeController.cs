@@ -14,19 +14,10 @@ namespace Module_2_Weather.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public static Task<WeatherContent> weatherContent;
-        
+
         public HomeController(ILogger<HomeController> logger)
         {
-            string? city;
-            if (!((city = Request?.Form?["Input"]) == null))
-            {
-                weatherContent = WeatherContent(city);
-            }
-            else
-            {
-                weatherContent = WeatherContent("Ferghana");
-            }
+            
             _logger = logger;
         }
 
@@ -36,15 +27,32 @@ namespace Module_2_Weather.Controllers
             {
                 client.BaseAddress = new Uri("http://api.openweathermap.org");
                 var response = await client.GetAsync($"/data/2.5/weather?q={city}&appid=096705135d17ed57f50fd794b16fad59&units=metric");
-                response.EnsureSuccessStatusCode();
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+                catch (Exception)
+                {
+                    ViewData["InvalidInput"] = "True";
+                }
                 string content = await response.Content.ReadAsStringAsync();
                 var WeatherContent = JsonConvert.DeserializeObject<WeatherContent>(content);
                 return WeatherContent;
             }
         }
 
-        public IActionResult Index()
+
+        public async Task<ActionResult> Index(WeatherContent content)
         {
+            if (content.Name is null)
+            {
+                content.Name = "Ferghana";
+            }
+
+            WeatherContent weather = await WeatherContent(content.Name);
+
+            ViewData["WeatherContent"] = weather;
+
             return View();
         }
 
